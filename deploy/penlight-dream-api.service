@@ -1,0 +1,18 @@
+[Unit]
+Description=Penlight Dream API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=box
+Group=box
+EnvironmentFile=@ENV_FILE@
+ExecStart=/usr/local/bin/penlight-dream-api
+Restart=always
+RestartSec=5
+MemoryMax=150M
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

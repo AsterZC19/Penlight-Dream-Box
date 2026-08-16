@@ -1,0 +1,52 @@
+services:
+  dream-api:
+    image: ghcr.io/asterzc19/penlight-dream-api:latest
+    container_name: penlight-dream-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+    networks:
+      - box-net
+
+  mongodb:
+    image: mongo:7
+    container_name: penlight-dream-mongodb
+    restart: unless-stopped
+    command: mongod --wiredTigerCacheSizeGB 0.25 --bind_ip_all
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - box-net
+
+  box:
+    image: ghcr.io/asterzc19/penlight-dream-box:latest
+    build: .
+    container_name: penlight-dream-box
+    restart: unless-stopped
+    depends_on:
+      - dream-api
+      - mongodb
+    environment:
+      BOX_HOST: 0.0.0.0
+      BOX_PORT: 8080
+      BOX_API_PREFIX: /api
+      DREAM_API_BASE: http://dream-api:8080/api
+      MONGODB_URI: mongodb://mongodb:27017
+      MONGODB_DB: ${MONGODB_DB:-penlight_box}
+      POLL_INTERVAL_SECS: ${POLL_INTERVAL_SECS:-300}
+      MASTER_INTERVAL_SECS: ${MASTER_INTERVAL_SECS:-3600}
+      POST_END_WINDOW_SECS: ${POST_END_WINDOW_SECS:-3600}
+      API_KEY: ${API_KEY:-}
+    ports:
+      - "${BOX_PORT:-8081}:8080"
+    networks:
+      - box-net
+
+volumes:
+  mongo-data:
+
+networks:
+  box-net:

@@ -1,0 +1,18 @@
+[Unit]
+Description=Penlight Dream Box
+After=network-online.target mongod.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=box
+Group=box
+EnvironmentFile=@ENV_FILE@
+ExecStart=/usr/local/bin/penlight-dream-box
+Restart=always
+RestartSec=5
+MemoryMax=300M
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
