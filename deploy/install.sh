@@ -32,6 +32,38 @@ download_release() {
   mv "$dest.tmp" "$dest"
 }
 
+install_mongodb_tarball() {
+  local version="${MONGO_VERSION:-7.0.17}"
+  local tarball="mongodb-linux-x86_64-debian12-$version.tgz"
+  local url="https://fastdl.mongodb.org/linux/$tarball"
+  echo "下载 $url"
+  curl -fL --retry 3 -o "/tmp/$tarball" "$url"
+  tar -xzf "/tmp/$tarball" -C /opt
+  local base="/opt/mongodb-linux-x86_64-debian12-$version"
+  install -m 755 "$base"/bin/* /usr/local/bin/
+  id -u mongodb >/dev/null 2>&1 || useradd --system --no-create-home mongodb
+  mkdir -p /var/lib/mongodb /var/log/mongodb
+  chown -R mongodb:mongodb /var/lib/mongodb /var/log/mongodb
+  cat > /etc/systemd/system/mongod.service <<'UNIT'
+[Unit]
+Description=MongoDB Database Server
+After=network.target
+
+[Service]
+Type=simple
+User=mongodb
+ExecStart=/usr/local/bin/mongod --config /etc/mongod.conf
+Restart=always
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+  systemctl daemon-reload
+  echo "MongoDB $version 已通过 tarball 安装"
+}
+
 # 二进制：本地已有则复用，否则从 GitHub 下载最新 release
 download_release "$BOX_REPO" "penlight-dream-box-$ARCH" "$PROJECT_DIR/penlight-dream-box"
 download_release "$DREAM_API_REPO" "penlight-dream-api-$ARCH" "$PROJECT_DIR/penlight-dream-api"
@@ -53,11 +85,20 @@ case "$DISTRO_ID" in
     echo "deb [signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/7.0 main" > /etc/apt/sources.list.d/mongodb-org-7.0.list
     ;;
   *)
-    echo "!! 不支持的发行版 $DISTRO_ID，请手动安装 MongoDB 7" >&2
+    echo "!! 不支持的发行版 $DISTRO_ID，将直接使用 tarball 方式安装" >&2
     ;;
 esac
-apt-get update
-apt-get install -y mongodb-org
+
+# Debian trixie 的 sqv 拒绝 MongoDB 源的 SHA1 绑定签名, apt 安装会失败,
+# 失败时自动回退到官方 tarball 下载, 不依赖 apt 源签名。
+apt-get update >/dev/null 2>&1 || true
+if apt-get install -y mongodb-org >/dev/null 2>&1; then
+  echo "MongoDB 已通过 apt 安装"
+else
+  echo "apt 安装失败，回退 tarball 方式"
+  rm -f /etc/apt/sources.list.d/mongodb-org-7.0.list
+  install_mongodb_tarball
+fi
 
 echo "==> 配置 MongoDB 内存限制"
 install -m 644 "$SCRIPT_DIR/mongod.conf" /etc/mongod.conf
