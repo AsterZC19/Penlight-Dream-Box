@@ -17,21 +17,18 @@
 所有客户端均从 [`ios/common/penlight-credentials.js`](../ios/common/penlight-credentials.js)
 远程加载脚本，不再需要把 JS 文件保存到设备。
 
-## 一键安装
+## 安装
 
-请在已安装对应客户端的 iPhone Safari 中点击下面的链接。链接会直接打开客户端的远程
-导入页面；Loon 导入的是 Plugin，Stash 导入的是 Override，Quantumult X 添加的是远程
-Rewrite 片段。
+请手动复制对应地址，粘贴到客户端的远程导入或添加页面。Loon 导入的是 Plugin，Stash 导入的是 Override，Quantumult X 添加的是远程 Rewrite 片段。
 
-- [Shadowrocket 一键安装](shadowrocket://install?module=https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Fshadowrocket%2Fpenlight-credentials.module)
-- [Surge 一键安装](surge:///install-module?url=https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Fsurge%2Fpenlight-credentials.sgmodule)
-- [Stash 一键安装](stash://install-override?url=https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Fstash%2Fpenlight-credentials.stoverride)
-- [Loon 一键安装](loon://import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Floon%2Fpenlight-credentials.plugin)
-- [Quantumult X 一键安装](https://quantumult.app/x/open-app/add-resource?remote-resource=%7B%22rewrite_remote%22%3A%5B%22https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Fquantumultx%2Fpenlight-credentials.remote.snippet%2C%20tag%3DPenlight%20Dream%20Box%22%5D%7D)
+| 软件 | raw GitHub 链接 |
+| --- | --- |
+| Shadowrocket | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/shadowrocket/penlight-credentials.module |
+| Surge | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/surge/penlight-credentials.sgmodule |
+| Stash | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/stash/penlight-credentials.stoverride |
+| Loon | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/loon/penlight-credentials.plugin |
+| Quantumult X | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/quantumultx/penlight-credentials.remote.snippet |
 
-网页首页的“**一键安装抓取配置**”会根据客户端生成导入链接。请在 iPhone 的 Safari
-中点击对应客户端：Shadowrocket、Surge、Stash 和 Loon 会直接打开各自的模块/插件导入页；
-Quantumult X 会通过 `add-resource` 添加远程片段。
 
 ## 使用步骤
 
