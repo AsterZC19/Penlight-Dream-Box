@@ -6,31 +6,36 @@
 
 ## 支持的客户端
 
-| 客户端 | 配置文件 | 脚本文件 | 额外说明 |
+| 客户端 | 远程导入文件 | 远程脚本 | 额外说明 |
 | --- | --- | --- | --- |
-| Loon | [`penlight-credentials.plugin`](../ios/loon/penlight-credentials.plugin) | [`penlight-credentials.js`](../ios/loon/penlight-credentials.js) | 支持通知复制和手动显示 |
-| Shadowrocket | [`penlight-credentials.module`](../ios/shadowrocket/penlight-credentials.module) | 远程自动加载 | 导入模块后自动捕获 |
-| Surge | [`penlight-credentials.sgmodule`](../ios/surge/penlight-credentials.sgmodule) | 远程自动加载 | 可手动运行显示脚本 |
-| Stash | [`penlight-credentials.stoverride`](../ios/stash/penlight-credentials.stoverride) | 远程自动加载 | 主页 Tile 显示已保存内容 |
-| Quantumult X | [`penlight-credentials.conf`](../ios/quantumultx/penlight-credentials.conf) | [`penlight-credentials.js`](../ios/quantumultx/penlight-credentials.js) | 脚本需要保存到本地 Scripts 文件夹 |
+| Loon | [`penlight-credentials.plugin`](../ios/loon/penlight-credentials.plugin) | [`ios/common/penlight-credentials.js`](../ios/common/penlight-credentials.js) | 远程导入插件，支持通知复制和手动显示 |
+| Shadowrocket | [`penlight-credentials.module`](../ios/shadowrocket/penlight-credentials.module) | [`ios/common/penlight-credentials.js`](../ios/common/penlight-credentials.js) | 远程导入模块后自动捕获 |
+| Surge | [`penlight-credentials.sgmodule`](../ios/surge/penlight-credentials.sgmodule) | [`ios/common/penlight-credentials.js`](../ios/common/penlight-credentials.js) | 远程导入模块，可手动运行显示脚本 |
+| Stash | [`penlight-credentials.stoverride`](../ios/stash/penlight-credentials.stoverride) | [`ios/common/penlight-credentials.js`](../ios/common/penlight-credentials.js) | 远程导入 Override，主页 Tile 显示已保存内容 |
+| Quantumult X | [`penlight-credentials.remote.snippet`](../ios/quantumultx/penlight-credentials.remote.snippet) | [`ios/common/penlight-credentials.js`](../ios/common/penlight-credentials.js) | 通过网页一键添加远程片段 |
 
-Shadowrocket、Surge 和 Stash 会从 [`ios/common/penlight-credentials.js`](../ios/common/penlight-credentials.js)
-加载通用脚本；Loon 保留现有的本地插件脚本，Quantumult X 使用它自己的本地脚本适配。
+所有客户端均从 [`ios/common/penlight-credentials.js`](../ios/common/penlight-credentials.js)
+远程加载脚本，不再需要把 JS 文件保存到设备。
 
+## 一键安装
 
-```text
-https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/shadowrocket/penlight-credentials.module
-https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/surge/penlight-credentials.sgmodule
-https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/loon/penlight-credentials.plugin
-```
+请在已安装对应客户端的 iPhone Safari 中点击下面的链接。链接会直接打开客户端的远程
+导入页面；Loon 导入的是 Plugin，Stash 导入的是 Override，Quantumult X 添加的是远程
+Rewrite 片段。
 
-Stash 可导入 [`penlight-credentials.stoverride`](../ios/stash/penlight-credentials.stoverride)，
-Quantumult X 需要按下方说明把 JS 保存到本地。
+- [Shadowrocket 一键安装](shadowrocket://install?module=https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Fshadowrocket%2Fpenlight-credentials.module)
+- [Surge 一键安装](surge:///install-module?url=https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Fsurge%2Fpenlight-credentials.sgmodule)
+- [Stash 一键安装](stash://install-override?url=https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Fstash%2Fpenlight-credentials.stoverride)
+- [Loon 一键安装](loon://import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Floon%2Fpenlight-credentials.plugin)
+- [Quantumult X 一键安装](https://quantumult.app/x/open-app/add-resource?remote-resource=%7B%22rewrite_remote%22%3A%5B%22https%3A%2F%2Fraw.githubusercontent.com%2FAsterZC19%2FPenlight-Dream-Box%2Fmain%2Fios%2Fquantumultx%2Fpenlight-credentials.remote.snippet%2C%20tag%3DPenlight%20Dream%20Box%22%5D%7D)
+
+网页首页的“**一键安装抓取配置**”会根据客户端生成导入链接。请在 iPhone 的 Safari
+中点击对应客户端：Shadowrocket、Surge、Stash 和 Loon 会直接打开各自的模块/插件导入页；
+Quantumult X 会通过 `add-resource` 添加远程片段。
 
 ## 使用步骤
 
-1. 在对应客户端导入上表中的配置文件；Quantumult X 先把它的 JS 文件保存到
-   “我的 iPhone / Quantumult X / Scripts / penlight-credentials.js”。
+1. 在网页首页“**一键安装抓取配置**”中点击对应客户端，直接打开导入页面。
 2. 为 `api.garupa.jp` 开启 MITM，安装并信任客户端证书。
 3. 启用配置，打开游戏并进入个人资料或其他会访问 Garupa 用户接口的页面。
 4. 收到通知后点击复制 JSON。Surge 可手动运行 `penlight-credentials-show`；Loon

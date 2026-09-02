@@ -31,7 +31,7 @@ iOS 版本不同，请设置 `GARUPA_ANDROID_CLIENT_VERSIONS`。
 - URL `/api/user/<UID>` 中的 UID；
 - 请求头 `X-Signature`，对应本项目配置里的 `GARUPA_UUIDS`。
 
-各客户端的可导入配置和使用步骤见 [`docs/ios-credentials.md`](docs/ios-credentials.md)。所有脚本只在本机保存结果，
+网页首页支持按客户端一键远程安装模块，不需要手动下载或保存脚本；各客户端的导入链接和使用步骤见 [`docs/ios-credentials.md`](docs/ios-credentials.md)。所有脚本只在本机保存结果，
 不修改游戏请求，也不会读取或上传加密 Key/IV。
 
 ## License

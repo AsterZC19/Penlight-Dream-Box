@@ -14,6 +14,70 @@
   const formStatus = document.querySelector("#form-status");
   const credentialJson = document.querySelector("#credential-json");
   const jsonStatus = document.querySelector("#json-status");
+  const moduleStatus = document.querySelector("#module-status");
+
+  const moduleRoot =
+    "https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios";
+  const moduleUrls = {
+    shadowrocket: moduleRoot + "/shadowrocket/penlight-credentials.module",
+    surge: moduleRoot + "/surge/penlight-credentials.sgmodule",
+    stash: moduleRoot + "/stash/penlight-credentials.stoverride",
+    loon: moduleRoot + "/loon/penlight-credentials.plugin",
+    quantumultx: moduleRoot + "/quantumultx/penlight-credentials.remote.snippet",
+  };
+
+  const clientIconUrls = {
+    shadowrocket:
+      "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/44/d3/df/44d3df14-cf72-37d1-6e61-582f7023b90e/AppIcon-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
+    surge:
+      "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2e/bd/90/2ebd90d2-433a-1f82-b9b4-1fd603a5d044/AppIconS-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
+    stash:
+      "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/8a/99/dc/8a99dc65-dbfa-d9f9-be4e-4170a0658239/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-sRGB-85-220.png/512x512bb.jpg",
+    loon:
+      "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/fe/c4/5f/fec45fa1-1194-c944-7c5c-a939e1ee0dfe/AppIcon-0-1x_U007emarketing-0-8-0-85-220-0.png/512x512bb.jpg",
+    quantumultx:
+      "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/85/72/e2/8572e29e-77c2-ab07-d898-48e92fd40f3d/AppIcon-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
+  };
+
+  document.querySelectorAll("[data-client-icon]").forEach((badge) => {
+    const iconUrl = clientIconUrls[badge.dataset.clientIcon];
+    if (!iconUrl) return;
+
+    const image = document.createElement("img");
+    image.src = iconUrl;
+    image.alt = "";
+    image.decoding = "async";
+    image.addEventListener("load", () => badge.classList.add("has-icon"));
+    image.addEventListener("error", () => image.remove());
+    badge.appendChild(image);
+  });
+
+  const quantumultResource = encodeURIComponent(
+    JSON.stringify({
+      rewrite_remote: [moduleUrls.quantumultx + ", tag=Penlight Dream Box"],
+    }),
+  );
+  const moduleInstallUrls = {
+    shadowrocket:
+      "shadowrocket://install?module=" + encodeURIComponent(moduleUrls.shadowrocket),
+    surge: "surge:///install-module?url=" + encodeURIComponent(moduleUrls.surge),
+    stash: "stash://install-override?url=" + encodeURIComponent(moduleUrls.stash),
+    loon: "loon://import?plugin=" + encodeURIComponent(moduleUrls.loon),
+    quantumultx:
+      "https://quantumult.app/x/open-app/add-resource?remote-resource=" +
+      quantumultResource,
+  };
+
+  document.querySelectorAll("[data-install-client]").forEach((link) => {
+    const client = link.dataset.installClient;
+    const installUrl = moduleInstallUrls[client];
+    if (!installUrl) return;
+    link.href = installUrl;
+    link.addEventListener("click", () => {
+      const label = link.querySelector("strong").textContent;
+      setStatus(moduleStatus, "正在打开 " + label + " 的远程导入页面…", "success");
+    });
+  });
 
   function setStatus(element, message, kind = "") {
     element.textContent = message;
@@ -74,7 +138,7 @@
   document.querySelector("#parse-json").addEventListener("click", () => {
     const raw = credentialJson.value.trim();
     if (!raw) {
-      setStatus(jsonStatus, "请先粘贴 Loon 导出的 JSON。", "error");
+      setStatus(jsonStatus, "请先粘贴代理客户端通知中的 JSON。", "error");
       return;
     }
 
@@ -89,13 +153,13 @@
     const uid = findValue(parsed, ["uid", "userid", "user_id"]);
     const uuid = findValue(parsed, ["uuid", "deviceuuid", "device_uuid"]);
     if (!uid || !uuid) {
-      setStatus(jsonStatus, "没有找到 uid 和 uuid，请粘贴插件通知中的完整 JSON。", "error");
+      setStatus(jsonStatus, "没有找到 uid 和 uuid，请粘贴代理客户端通知中的完整 JSON。", "error");
       return;
     }
 
     uidInput.value = uid;
     uuidInput.value = uuid;
-    setStatus(jsonStatus, "已填入 UID 和 UUID，请确认平台后下载。", "success");
+    setStatus(jsonStatus, "已填入 UID 和 UUID，请检查平台后生成资料。", "success");
     uidInput.focus();
   });
 
@@ -132,14 +196,14 @@
       return;
     }
     if (!uuid) {
-      setStatus(formStatus, "请输入 UUID。", "error");
+      setStatus(formStatus, "请输入 UUID（代理通知中的 X-Signature）。", "error");
       uuidInput.focus();
       return;
     }
 
     downloadButton.disabled = true;
     downloadButton.classList.add("is-loading");
-    setStatus(formStatus, "正在读取账号资料，完成后会自动下载…");
+    setStatus(formStatus, "正在请求 Garupa 资料，完成后会自动下载…");
 
     try {
       const headers = { "Content-Type": "application/json" };
