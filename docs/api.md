@@ -15,7 +15,9 @@
 
 ### 参数传递
 
-全部端点使用 GET 方法，参数通过 URL 查询字符串传递，形如 `?server=0&monthlyId=2&tier=100`。
+排名端点使用 GET 方法，参数通过 URL 查询字符串传递，形如
+`?server=0&monthlyId=2&tier=100`。profile 动态导出使用 POST JSON，
+避免把 UUID 放进 URL。
 
 ### server 参数
 
@@ -143,6 +145,67 @@
   "status": "ok"
 }
 ```
+
+### GET /profile/export 与 /profile/export.json
+
+从 Dream-API 获取 `.env` 中配置的固定玩家卡牌，并返回可直接粘贴到 Bestdori
+Profile Manager「导入资料」文本框的 JSON 文件。
+
+请求：
+
+```
+GET /api/profile/export.json
+```
+
+例如：
+
+```bash
+curl -OJ http://127.0.0.1:8081/api/profile/export.json
+```
+
+如果设置了 `API_KEY`，需要附带 `X-API-Key` 或 `Authorization: Bearer`。
+
+返回内容是 Bestdori 档案对象，包含 `name`、`server`、`items` 与 `cards`。
+
+### POST /profile/export 与 /profile/export.json
+
+按请求中的 UID、UUID 和平台读取指定玩家，不修改全局 `.env`，也不会将
+凭据写入 MongoDB、缓存或日志。UUID 对应官方请求头 `X-Signature`。
+
+请求：
+
+```text
+POST /api/profile/export.json
+Content-Type: application/json
+
+{
+  "uid": "123456789",
+  "uuid": "YOUR_X_SIGNATURE",
+  "platform": "iOS"
+}
+```
+
+`platform` 只能是 `iOS` 或 `Android`（大小写不敏感）。Box 会按平台发送
+`X-ClientPlatform`，并用服务器端的 `GARUPA_ENCRYPTION_KEYS` /
+`GARUPA_ENCRYPTION_IVS` 解密官方响应。响应带
+`Content-Disposition: attachment`，文件名为 `bestdori-profile-<uid>.json`。
+
+网页入口位于 `/`，Loon 插件输出的 `{ "uid": "...", "uuid": "..." }` 可以
+直接粘贴到网页的 JSON 框中；解析只在浏览器中完成，不会单独上传这段文本。
+
+`cards`、基建和角色潜能均来自官方 API 的解码结果（动态 POST 路径由 Box
+直接请求；旧 GET 路径经 Dream-API）。基建读取 `user/areas` 返回的
+`areaItemCategory` 与 `level`，角色潜能读取 `user/characters` 返回的
+`characterId` 与 `potentialLevel` 三维字段。
+基建会按 Bestdori Profile Manager 的 74 个固定槽位逐项映射，并将游戏等级
+`level` 转为导入值 `level - 1`；上游分类 59、68、72 当前没有对应的 Bestdori
+导入槽位，因此会被跳过。`potentials` 表示每个角色的
+`potentialLevel.performanceLevel + techniqueLevel + visualLevel`，不是角色 `rank`。
+卡牌字段会映射为 `id`、`level`、`master`、`skill`、`ep`、`train`、`art`
+和 `exclude`。其中 `ep` 由玩家剧情记录与卡牌主数据交叉计算。
+`train` 根据 `trainingStatus` 判断，`art` 直接根据 API 的 `illust` 判断：
+`normal` 为 0，`after_training` 为 1。
+Bestdori 内部的 `skill` 使用 0–4，Dream-API 的 `skillLevel` 使用 1–5，导出时会减 1。
 
 ### GET /api/monthlyRanking/info 与 /api/monthlyRanking/info.json
 

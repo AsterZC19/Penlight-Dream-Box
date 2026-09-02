@@ -16,9 +16,9 @@ use serde_json::{json, Value};
 
 use crate::api::monthly::parse_int;
 use crate::api::resample_points;
-use crate::storage::TopPoint;
 use crate::api::AppState;
 use crate::error::{AppError, AppResult};
+use crate::storage::TopPoint;
 use crate::storage::{is_event_border_tier, is_music_border_tier, CutoffPoint, PlayerDoc};
 
 const BESTDORI_BASE: &str = "https://bestdori.com";

@@ -7,8 +7,10 @@
 pub mod auth;
 pub mod event;
 pub mod monthly;
+pub mod profile;
+pub mod web;
 
-use axum::extract::FromRef;
+use axum::extract::{DefaultBodyLimit, FromRef};
 use axum::routing::get;
 use axum::Router;
 
@@ -20,6 +22,8 @@ use crate::storage::Storage;
 pub struct AppState {
     pub storage: Storage,
     pub config: Config,
+    pub upstream: crate::upstream::Upstream,
+    pub profile_client: crate::garupa::ProfileClient,
 }
 
 impl FromRef<AppState> for Storage {
@@ -70,6 +74,16 @@ pub fn build_router(state: AppState, cfg: &Config) -> Router {
         .route("/eventtop/data", get(event::eventtop_data))
         .route("/tracker/data", get(event::tracker_data))
         .route("/events", get(event::events))
+        // Bestdori Profile Manager import data
+        .route(
+            "/profile/export",
+            get(profile::export).post(profile::export_for_credentials),
+        )
+        .route(
+            "/profile/export.json",
+            get(profile::export).post(profile::export_for_credentials),
+        )
+        .layer(DefaultBodyLimit::max(32 * 1024))
         .with_state(state.clone())
         .layer(axum::middleware::from_fn_with_state(
             state.clone(),
@@ -78,6 +92,9 @@ pub fn build_router(state: AppState, cfg: &Config) -> Router {
 
     // Health check outside the API prefix.
     Router::new()
+        .route("/", get(web::index))
+        .route("/assets/app.css", get(web::styles))
+        .route("/assets/app.js", get(web::script))
         .route(
             "/health",
             get(|| async { axum::Json(serde_json::json!({ "status": "ok" })) }),

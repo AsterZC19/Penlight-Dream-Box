@@ -9,9 +9,11 @@ license = "MIT"
 axum = "0.8"
 tower-http = { version = "0.6", features = ["compression-gzip", "compression-br"] }
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal", "time"] }
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "gzip", "deflate", "brotli", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+aes = "0.8"
+cbc = { version = "0.1", features = ["alloc"] }
 mongodb = "3"
 bson = "2"
 tracing = "0.1"

@@ -1,0 +1,378 @@
+{
+  "name": "音嵐谷",
+  "server": 0,
+  "items": {
+    "PoppinParty": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "Afterglow": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "HelloHappyWorld": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "PastelPalettes": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "Roselia": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "RaiseASuilen": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "Morfonica": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "MyGO": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "Everyone": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "Magazine": [
+      null,
+      null,
+      null
+    ],
+    "Plaza": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "Menu": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "potentials": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "cards": [
+    {
+      "id": 1,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 5,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 9,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 13,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 17,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 26,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 86,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 230,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 359,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 424,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 441,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 638,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 645,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 653,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 654,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 875,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 879,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 962,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 1060,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 1071,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 1441,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 1485,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    },
+    {
+      "id": 1817,
+      "level": 1,
+      "master": 0,
+      "skill": 1,
+      "ep": 0,
+      "train": 0,
+      "art": 0,
+      "exclude": false
+    }
+  ]
+}

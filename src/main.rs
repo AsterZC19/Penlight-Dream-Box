@@ -8,6 +8,7 @@ mod api;
 mod collector;
 mod config;
 mod error;
+mod garupa;
 mod storage;
 mod upstream;
 
@@ -18,6 +19,7 @@ use tracing::{error, info};
 
 use crate::api::AppState;
 use crate::collector::Collector;
+use crate::garupa::ProfileClient;
 use crate::storage::Storage;
 use crate::upstream::Upstream;
 
@@ -50,6 +52,13 @@ async fn main() {
             std::process::exit(1);
         }
     };
+    let profile_client = match ProfileClient::new(&cfg) {
+        Ok(client) => client,
+        Err(e) => {
+            error!("{e}");
+            std::process::exit(1);
+        }
+    };
 
     // Collector: runs forever in its own task.
     let collector = Collector::new(upstream.clone(), storage.clone(), cfg.clone());
@@ -59,6 +68,8 @@ async fn main() {
     let state = AppState {
         storage,
         config: cfg.clone(),
+        upstream,
+        profile_client,
     };
     let app = api::build_router(state, &cfg);
 

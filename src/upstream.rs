@@ -8,6 +8,7 @@
 //! - `GET {base}/{server}/monthly-ranking/{id}` → full report with top and border users
 //! - `GET {base}/{server}/events` → event master list
 //! - `GET {base}/{server}/events/{id}/ranking?type=&mid=` → event ranking report
+//! - `GET {base}/{server}/user/*` and `GET {base}/{server}/cards` → profile data
 
 use serde::Deserialize;
 use serde_json::Value;
@@ -128,6 +129,7 @@ struct Entries<T> {
 #[derive(Clone)]
 pub struct Upstream {
     base: String,
+    api_key: Option<String>,
     http: reqwest::Client,
 }
 
@@ -139,15 +141,20 @@ impl Upstream {
             .map_err(|e| AppError::internal(format!("failed to build HTTP client: {e}")))?;
         Ok(Self {
             base: cfg.dream_api_base.clone(),
+            api_key: cfg.dream_api_key.clone(),
             http,
         })
     }
 
     async fn get_json(&self, path: &str) -> AppResult<Value> {
         let url = format!("{}/{}", self.base, path.trim_start_matches('/'));
-        let resp = self
-            .http
-            .get(&url)
+        let request = self.http.get(&url);
+        let request = if let Some(api_key) = &self.api_key {
+            request.header("X-API-Key", api_key)
+        } else {
+            request
+        };
+        let resp = request
             .send()
             .await
             .map_err(|e| AppError::upstream(format!("request failed: {url}: {e}")))?;
@@ -205,6 +212,36 @@ impl Upstream {
         let value = self.get_json(&path).await?;
         serde_json::from_value(value)
             .map_err(|e| AppError::upstream(format!("event {event_id} ranking parse failed: {e}")))
+    }
+
+    /// `GET {base}/jp/user/profile` → the configured player's profile.
+    pub async fn user_profile(&self) -> AppResult<Value> {
+        self.get_json("jp/user/profile").await
+    }
+
+    /// `GET {base}/jp/user/situations` → the configured player's owned cards.
+    pub async fn user_situations(&self) -> AppResult<Value> {
+        self.get_json("jp/user/situations").await
+    }
+
+    /// `GET {base}/jp/user/episodes` → unlocked/read episode records.
+    pub async fn user_episodes(&self) -> AppResult<Value> {
+        self.get_json("jp/user/episodes").await
+    }
+
+    /// `GET {base}/jp/cards` → card master data, including card episodes.
+    pub async fn cards(&self) -> AppResult<Value> {
+        self.get_json("jp/cards").await
+    }
+
+    /// `GET {base}/jp/user/areas` → enabled area items with category and level.
+    pub async fn user_areas(&self) -> AppResult<Value> {
+        self.get_json("jp/user/areas").await
+    }
+
+    /// `GET {base}/jp/user/characters` → character rank and released potential.
+    pub async fn user_characters(&self) -> AppResult<Value> {
+        self.get_json("jp/user/characters").await
     }
 
     /// Health probe used by the collector before starting. The Dream-API

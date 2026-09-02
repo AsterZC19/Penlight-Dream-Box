@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f5f7" />
+    <title>Penlight Dream Box</title>
+    <link rel="stylesheet" href="/assets/app.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Penlight Dream Box 首页">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>Penlight <strong>Dream Box</strong></span>
+      </a>
+      <span class="header-note">Bestdori Profile Exporter</span>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero">
+        <p class="eyebrow">PROFILE EXPORTER</p>
+        <h1>导出卡组</h1>
+        <p class="hero-copy">
+          生成可以直接导入 Bestdori Profile Manager
+          的用户资料。
+        </p>
+      </section>
+
+      <section class="workspace" aria-label="资料导出">
+        <div class="panel form-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">01 · CREDENTIALS</p>
+              <h2>填写账号信息</h2>
+            </div>
+            <span class="secure-dot"><span></span>仅本次使用</span>
+          </div>
+
+          <form id="export-form" novalidate>
+            <label class="field">
+              <span class="field-label">UID</span>
+              <input
+                id="uid"
+                name="uid"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                placeholder="例如 123456789"
+                required
+              />
+              <span class="field-hint">游戏个人资料中的数字 UID</span>
+            </label>
+
+            <label class="field">
+              <span class="field-label">UUID <span class="muted-label">X-Signature</span></span>
+              <div class="input-with-action">
+                <input
+                  id="uuid"
+                  name="uuid"
+                  type="password"
+                  autocomplete="off"
+                  spellcheck="false"
+                  placeholder="粘贴设备请求中的 UUID"
+                  required
+                />
+                <button id="toggle-uuid" class="input-action" type="button" aria-label="显示 UUID">
+                  显示
+                </button>
+              </div>
+              <span class="field-hint">不会写入数据库、日志或浏览器存储</span>
+            </label>
+
+            <fieldset class="field platform-field">
+              <legend class="field-label">客户端平台</legend>
+              <div class="platform-switch" role="group" aria-label="选择客户端平台">
+                <button class="platform-option is-selected" type="button" data-platform="iOS">
+                  <span class="platform-icon">●</span> iOS
+                </button>
+                <button class="platform-option" type="button" data-platform="Android">
+                  <span class="platform-icon android-icon">◆</span> Android
+                </button>
+              </div>
+              <input id="platform" name="platform" type="hidden" value="iOS" />
+            </fieldset>
+
+            <details class="advanced">
+              <summary>服务器访问密钥 <span>可选</span></summary>
+              <label class="field compact-field">
+                <span class="sr-only">服务器访问密钥</span>
+                <input
+                  id="api-key"
+                  type="password"
+                  autocomplete="off"
+                  placeholder="如果部署时设置了 API_KEY，请在这里输入"
+                />
+              </label>
+            </details>
+
+            <button id="download-button" class="primary-button" type="submit">
+              <span class="button-label">下载 Bestdori 资料</span>
+              <span class="button-arrow" aria-hidden="true">↗</span>
+              <span class="button-spinner" aria-hidden="true"></span>
+            </button>
+            <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <aside class="side-column">
+          <div class="panel import-panel">
+            <div class="panel-heading compact-heading">
+              <div>
+                <p class="section-kicker">02 · QUICK FILL</p>
+                <h2>粘贴 Loon JSON</h2>
+              </div>
+              <span class="paste-icon" aria-hidden="true">⌘</span>
+            </div>
+            <p class="panel-copy">
+              将复制的 JSON 粘贴到这里自动填入 UID 和 UUID。
+            </p>
+            <textarea
+              id="credential-json"
+              rows="5"
+              spellcheck="false"
+              placeholder='{
+  "uid": "123456789",
+  "uuid": "..."
+}'
+            ></textarea>
+            <div class="import-actions">
+              <button id="parse-json" class="secondary-button" type="button">解析并填入</button>
+              <button id="clear-json" class="text-button" type="button">清空</button>
+            </div>
+            <p id="json-status" class="json-status" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-number">03</div>
+            <div>
+              <h3>导入 Bestdori</h3>
+              <p>下载完成后，在 Profile Manager 选择「导入资料」即可。</p>
+              <a
+                href="https://bestdori.com/profile/manager"
+                target="_blank"
+                rel="noreferrer"
+              >打开 Profile Manager <span>↗</span></a>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <footer class="privacy-note">
+        <span class="privacy-icon" aria-hidden="true">⌁</span>
+        <span>UID、UUID 只用于当前导出请求。加密密钥保留在服务器端，不会发送到浏览器。</span>
+      </footer>
+    </main>
+
+    <script>
+      window.PENLIGHT_CONFIG = { apiPrefix: __PENLIGHT_API_PREFIX__ };
+    </script>
+    <script src="/assets/app.js" defer></script>
+  </body>
+</html>

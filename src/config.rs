@@ -41,15 +41,31 @@ fn get_u64(name: &str, fallback: u64) -> u64 {
         .unwrap_or(fallback)
 }
 
-fn get_u16(name: &str, fallback: u16) -> u16 {
+fn get_optional_bytes(name: &str) -> Option<Vec<u8>> {
     std::env::var(name)
         .ok()
-        .and_then(|v| v.parse::<u16>().ok())
-        .unwrap_or(fallback)
+        .map(|value| value.trim().as_bytes().to_vec())
+        .filter(|value| !value.is_empty())
+}
+
+fn normalize_garupa_base(raw: &str) -> String {
+    let raw = raw.trim().trim_end_matches('/');
+    if raw.is_empty() {
+        return String::new();
+    }
+    if raw.starts_with("http://") || raw.starts_with("https://") {
+        if raw.ends_with("/api") {
+            format!("{raw}/")
+        } else {
+            format!("{raw}/api/")
+        }
+    } else {
+        format!("https://{raw}/api/")
+    }
 }
 
 /// Box runtime configuration.
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Config {
     /// HTTP listen host.
     pub host: String,
@@ -61,9 +77,11 @@ pub struct Config {
     /// Base URL of the already-encapsulated Penlight-Dream-API service
     ///, e.g. `http://dream-api:8080/api`.
     pub dream_api_base: String,
+    /// Optional API key used when Box calls Dream-API. Falls back to
+    /// `API_KEY` so the bundled Docker setup can use one shared secret.
+    pub dream_api_key: Option<String>,
     /// Upstream request timeout.
     pub dream_api_timeout: Duration,
-
     /// MongoDB connection string.
     pub mongodb_uri: String,
     /// MongoDB database name.
@@ -80,6 +98,19 @@ pub struct Config {
     /// Optional API key; when set, every `/api/*` request must send it via
     /// `X-API-Key` or `Authorization: Bearer <key>`.
     pub api_key: Option<String>,
+
+    /// Direct profile-export client settings. The encryption material is read
+    /// by Box as server-side configuration and is never sent to the browser.
+    pub garupa_base: String,
+    pub garupa_encryption_key: Option<Vec<u8>>,
+    pub garupa_encryption_iv: Option<Vec<u8>>,
+    pub garupa_client_version: String,
+    pub garupa_android_client_version: String,
+    pub garupa_unity_version: String,
+    pub garupa_user_agent: String,
+    pub garupa_package_url: String,
+    pub garupa_timeout: Duration,
+    pub garupa_version_ttl: Duration,
 }
 
 /// Loads configuration from the environment.
@@ -95,8 +126,15 @@ pub fn load() -> Config {
         dream_api_base: get("DREAM_API_BASE", "http://127.0.0.1:8081/api")
             .trim_end_matches('/')
             .to_string(),
+        dream_api_key: {
+            let key = get_first(&["DREAM_API_KEY", "API_KEY"], "");
+            if key.is_empty() {
+                None
+            } else {
+                Some(key)
+            }
+        },
         dream_api_timeout: Duration::from_secs(get_u64("DREAM_API_TIMEOUT_SECS", 30)),
-
         mongodb_uri: get("MONGODB_URI", "mongodb://127.0.0.1:27017"),
         mongodb_db: get("MONGODB_DB", "penlight_box"),
 
@@ -112,5 +150,31 @@ pub fn load() -> Config {
                 Some(key)
             }
         },
+
+        garupa_base: normalize_garupa_base(&get("GARUPA_SERVER_BASES", "api.garupa.jp")),
+        garupa_encryption_key: get_optional_bytes("GARUPA_ENCRYPTION_KEYS"),
+        garupa_encryption_iv: get_optional_bytes("GARUPA_ENCRYPTION_IVS"),
+        garupa_client_version: get_first(&["GARUPA_CLIENT_VERSIONS"], "10.1.3"),
+        garupa_android_client_version: get_first(
+            &["GARUPA_ANDROID_CLIENT_VERSIONS", "GARUPA_CLIENT_VERSIONS"],
+            "10.1.3",
+        ),
+        garupa_unity_version: get_first(&["GARUPA_UNITY_VERSIONS"], "2021.3.45f2"),
+        garupa_user_agent: {
+            let unity = get_first(&["GARUPA_UNITY_VERSIONS"], "2021.3.45f2");
+            get_first(
+                &["GARUPA_USER_AGENTS"],
+                &format!("UnityPlayer/{unity} (UnityWebRequest/1.0, libcurl/8.5.0-DEV)"),
+            )
+        },
+        garupa_package_url: get_first(
+            &["GARUPA_PACKAGE_URLS"],
+            "https://itunes.apple.com/jp/lookup?bundleId=jp.co.craftegg.band",
+        ),
+        garupa_timeout: Duration::from_secs(get_u64(
+            "GARUPA_PROFILE_TIMEOUT_SECS",
+            get_u64("DREAM_API_TIMEOUT_SECS", 30),
+        )),
+        garupa_version_ttl: Duration::from_secs(get_u64("GARUPA_VERSION_TTL_SECONDS", 3600)),
     }
 }

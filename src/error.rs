@@ -21,7 +21,10 @@ pub enum AppError {
     #[error("{0}")]
     NotFound(String),
 
-    #[error("upstream Dream-API error: {0}")]
+    #[error("{0}")]
+    Unavailable(String),
+
+    #[error("upstream service error: {0}")]
     Upstream(String),
 
     #[error("internal error: {0}")]
@@ -45,6 +48,10 @@ impl AppError {
         Self::NotFound(message.into())
     }
 
+    pub fn unavailable(message: impl Into<String>) -> Self {
+        Self::Unavailable(message.into())
+    }
+
     pub fn upstream(message: impl Into<String>) -> Self {
         Self::Upstream(message.into())
     }
@@ -58,6 +65,7 @@ impl AppError {
             Self::Validation { .. } => StatusCode::UNPROCESSABLE_ENTITY,
             Self::BadRequest(_) => StatusCode::BAD_REQUEST,
             Self::NotFound(_) => StatusCode::NOT_FOUND,
+            Self::Unavailable(_) => StatusCode::SERVICE_UNAVAILABLE,
             Self::Upstream(_) => StatusCode::BAD_GATEWAY,
             Self::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
