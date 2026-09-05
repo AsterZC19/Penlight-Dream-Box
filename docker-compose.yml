@@ -1,6 +1,6 @@
 services:
   dream-api:
-    image: ghcr.io/asterzc19/penlight-dream-api:latest
+    image: ghcr.io/lanyinn-labs/penlight-dream-api:latest
     container_name: penlight-dream-api
     restart: unless-stopped
     env_file:
@@ -22,7 +22,7 @@ services:
       - box-net
 
   box:
-    image: ghcr.io/asterzc19/penlight-dream-box:latest
+    image: ghcr.io/lanyinn-labs/penlight-dream-box:latest
     build: .
     container_name: penlight-dream-box
     restart: unless-stopped

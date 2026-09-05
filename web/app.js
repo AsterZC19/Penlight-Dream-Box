@@ -17,7 +17,7 @@
   const moduleStatus = document.querySelector("#module-status");
 
   const moduleRoot =
-    "https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios";
+    "https://raw.githubusercontent.com/Lanyinn-Labs/Penlight-Dream-Box/main/ios";
   const moduleUrls = {
     shadowrocket: moduleRoot + "/shadowrocket/penlight-credentials.module",
     surge: moduleRoot + "/surge/penlight-credentials.sgmodule",

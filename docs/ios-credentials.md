@@ -23,11 +23,11 @@
 
 | 软件 | raw GitHub 链接 |
 | --- | --- |
-| Shadowrocket | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/shadowrocket/penlight-credentials.module |
-| Surge | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/surge/penlight-credentials.sgmodule |
-| Stash | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/stash/penlight-credentials.stoverride |
-| Loon | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/loon/penlight-credentials.plugin |
-| Quantumult X | https://raw.githubusercontent.com/AsterZC19/Penlight-Dream-Box/main/ios/quantumultx/penlight-credentials.remote.snippet |
+| Shadowrocket | https://raw.githubusercontent.com/Lanyinn-Labs/Penlight-Dream-Box/main/ios/shadowrocket/penlight-credentials.module |
+| Surge | https://raw.githubusercontent.com/Lanyinn-Labs/Penlight-Dream-Box/main/ios/surge/penlight-credentials.sgmodule |
+| Stash | https://raw.githubusercontent.com/Lanyinn-Labs/Penlight-Dream-Box/main/ios/stash/penlight-credentials.stoverride |
+| Loon | https://raw.githubusercontent.com/Lanyinn-Labs/Penlight-Dream-Box/main/ios/loon/penlight-credentials.plugin |
+| Quantumult X | https://raw.githubusercontent.com/Lanyinn-Labs/Penlight-Dream-Box/main/ios/quantumultx/penlight-credentials.remote.snippet |
 
 
 ## 使用步骤

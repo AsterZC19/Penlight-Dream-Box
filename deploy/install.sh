@@ -14,8 +14,8 @@ PROJECT_DIR="${PROJECT_DIR:-$(dirname "$SCRIPT_DIR")}"
 ENV_FILE="${ENV_FILE:-$PROJECT_DIR/.env}"
 
 # GitHub Release 下载配置，可覆盖
-BOX_REPO="${BOX_REPO:-AsterZC19/Penlight-Dream-Box}"
-DREAM_API_REPO="${DREAM_API_REPO:-AsterZC19/Penlight-Dream-API}"
+BOX_REPO="${BOX_REPO:-Lanyinn-Labs/Penlight-Dream-Box}"
+DREAM_API_REPO="${DREAM_API_REPO:-Lanyinn-Labs/Penlight-Dream-API}"
 ARCH="${ARCH:-linux-x86_64}"
 
 echo "==> 项目目录: $PROJECT_DIR"
